@@ -6,7 +6,7 @@
 
 ## 项目概述
 
-**cc_mochi_szw** 是一个基于 ESP32-C3 微控制器的桌面伴侣设备。它在一块 1.54" 240×240 TFT 屏幕上通过纯代码绘制 26 种动态表情动画，并实现了 **WiFi AP · BLE · USB CDC Serial** 三条控制链路的并行接入——这使得 Claude Code 能在写代码/编译/报错时，实时驱动硬件切换对应表情。
+**cc_mochi_szw** 是一个基于 ESP32-C3 微控制器的桌面伴侣设备。它在一块 1.54" 240×240 TFT 屏幕上通过纯代码绘制 26 种动态表情动画，并实现了 **WiFi AP · BLE · USB Serial** 三条控制链路的并行接入——这使得 Claude Code 能在写代码/编译/报错时，实时驱动硬件切换对应表情。
 
 > 硬件平台基于开源项目 [yousifamanuel/clawd-mochi](https://github.com/yousifamanuel/clawd-mochi)，固件、表情动画、PC 联动链路为独立开发。
 
@@ -19,9 +19,9 @@
 | **MCU** | ESP32-C3 (RISC-V) @ 160MHz |
 | **显示驱动** | ST7789 SPI (Adafruit GFX 库), 40MHz |
 | **无线通信** | WiFi AP (802.11n) · BLE 4.2 (NimBLE) |
-| **有线通信** | USB CDC Serial @ 115200bps |
+| **有线通信** | USB Serial @ 115200bps |
 | **PC 端** | Python 3 + pyserial + WSL2 + usbipd |
-| **开发环境** | Arduino IDE / PlatformIO |
+| **开发环境** | Arduino IDE / VSCode / Git |
 
 ---
 
@@ -59,7 +59,7 @@
 三条控制链路并行接入，统一由 `executeCmd()` 单字符指令调度：
 - **WiFi AP** — HTTP Server，内置 Web 控制器页面，手机浏览器直连
 - **BLE** — NimBLE GATT Service `FFE0`，Characteristic `FFE1` 接收写入
-- **USB CDC Serial** — 115200bps，与 PC 端 `state_broadcaster.py` 通信
+- **USB Serial** — 115200bps，与 PC 端 `state_broadcaster.py` 通信
 
 指令到达后进入 26 种表情动画引擎：逐帧绘制逻辑 → 指令队列与中断处理 → 时间感知自动轮播 → ST7789 240×240 TFT 输出。
 
@@ -83,7 +83,7 @@
 | 编译报错 | `2` | **慌乱** | 反色 + 冷汗 |
 | 编译成功 | `3` | **骄傲** | 星星爆发 |
 
-**数据流**：Claude Code 更新 `state.txt` → `state_broadcaster.py` 检测变化 → 通过 USB CDC 发送单字符 → ESP32 解析并触发动画
+**数据流**：Claude Code 更新 `state.txt` → `state_broadcaster.py` 检测变化 → 通过 USB Serial 发送单字符 → ESP32 解析并触发动画
 
 > 串口通信细节见 [`docs/serial-control.md`](docs/serial-control.md)
 
@@ -191,9 +191,9 @@ cc_mochi_szw/
 
 修复后信号强度从几乎不可用到稳定连接。若蓝牙信号仍偏弱，可额外在另一焊盘加焊一根同长度导线。
 
-### Windows USB CDC 串口通信
+### Windows USB Serial 串口通信
 
-Windows 下 ESP32 的 USB CDC 存在三重障碍：系统独占锁定 COM 口、DTR 信号触发芯片硬复位、WSL 内设备权限不足。
+Windows 下 ESP32 的 USB Serial 存在三重障碍：系统独占锁定 COM 口、DTR 信号触发芯片硬复位、WSL 内设备权限不足。
 
 通过 **WSL2 + usbipd** 方案将 USB 设备从 Windows 驱动栈剥离并转发给 Linux 内核驱动接管，同时配合 `pyserial` 的 `dtr=False` 参数避免复位。详见 [`docs/serial-control.md`](docs/serial-control.md)。
 
