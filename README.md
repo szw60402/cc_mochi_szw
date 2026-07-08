@@ -8,7 +8,7 @@
 
 **cc_mochi_szw** 是一个基于 ESP32-C3 微控制器的桌面伴侣设备。它在一块 1.54" 240×240 TFT 屏幕上通过纯代码绘制 26 种动态表情动画，并实现了 **WiFi AP · BLE · USB Serial** 三条控制链路的并行接入——这使得 Claude Code 能在写代码/编译/报错时，实时驱动硬件切换对应表情。
 
-> 硬件平台基于开源项目 [yousifamanuel/clawd-mochi](https://github.com/yousifamanuel/clawd-mochi)，固件、表情动画、PC 联动链路为独立开发。
+> 硬件平台基于开源项目 [yousifamanuel/clawd-mochi](https://github.com/yousifamanuel/clawd-mochi)，新增了大量固件、表情动画、PC 联动链路。
 
 ---
 
