@@ -2,7 +2,7 @@
 
 > ESP32-C3 桌面宠物 · 26 种动态表情 · Claude Code 实时联动
 
-<img src="images/device.jpg" alt="cc_mochi_szw" width="600">
+![cc_mochi_szw](images/device.jpg)
 
 ## 项目概述
 
