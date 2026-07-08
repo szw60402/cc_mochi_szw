@@ -82,7 +82,7 @@
 | 编译中   | `v` | **执行** | 脉冲扫描 |
 | 编译报错 | `2` | **慌乱** | 反色 + 冷汗 |
 | 编译成功 | `3` | **骄傲** | 星星爆发 |
-
+| Fable5  | `4` | **极光** | 像素波动色彩 |
 **数据流**：Claude Code状态更新 `state.txt` → `state_broadcaster.py` 检测变化 → 通过 USB 发送单字符 → ESP32 解析并触发动画
 
 > 串口通信细节见 [`docs/serial-control.md`](docs/serial-control.md)
